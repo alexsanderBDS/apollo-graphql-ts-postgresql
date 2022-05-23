@@ -12,15 +12,15 @@ const typeDefs = gql`
     token: String
   }
 
-  type Query {
-    getAllUsers: [User!]!
-  }
-
   input userCreate {
     email: String!
     password: String!
   }
 
+  type Query {
+    getAllUsers: [User!]!
+    getUser(id: String!): User!
+  }
   type Mutation {
     createUser(input: userCreate!): String!
   }
