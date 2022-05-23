@@ -10,13 +10,6 @@ const getAllUsers = async (_: undefined, args: undefined) => {
   return users.rows;
 };
 
-interface NewUser {
-  input: {
-    email: String;
-    password: String;
-  };
-}
-
 const getUser = async (_: undefined, args: { id: string }) => {
   const users = await db.query("SELECT * FROM users WHERE id = $1", [args.id]);
 
@@ -27,13 +20,34 @@ const getUser = async (_: undefined, args: { id: string }) => {
   return users.rows.shift();
 };
 
-const createUser = async (_: undefined, { input }: NewUser) => {
+const createUser = async (
+  _: undefined,
+  { input }: { input: { email: String; password: String } }
+) => {
   const response = await db.query(
     "INSERT INTO users(email, password, createdat) VALUES($1, $2, $3)",
     [input.email, input.password, new Date()]
   );
 
   return response.rowCount > 0 ? "User created" : "No user created";
+};
+
+const updateUserPassword = async (
+  _: undefined,
+  { id, password }: { id: string; password: string }
+) => {
+  const response = await db.query(
+    "UPDATE users SET password = $1, updatedat = $2 WHERE id = $3",
+    [password, new Date(), id]
+  );
+
+  return response.rowCount > 0 ? "User password Updated!" : "Not updated!";
+};
+
+const deleteUser = async (_: undefined, { id }: { id: string }) => {
+  const response = await db.query("DELETE FROM users WHERE id = $1", [id]);
+
+  return response.rowCount > 0 ? "User deleted!" : "User not deleted!";
 };
 
 const resolvers = {
@@ -43,6 +57,8 @@ const resolvers = {
   },
   Mutation: {
     createUser,
+    updateUserPassword,
+    deleteUser,
   },
 };
 

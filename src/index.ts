@@ -4,10 +4,10 @@ import typeDefs from "./graphql/typeDefs";
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers: resolvers as any,
+  resolvers,
   csrfPrevention: true,
 });
 
 server.listen().then(({ url }: { url: string }) => {
-  console.log(`🚀  Server ready at ${url}`);
+  console.log(`🚀  Server running at ${url}`);
 });

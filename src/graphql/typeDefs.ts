@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server");
+import { gql } from "apollo-server";
 
 const typeDefs = gql`
   scalar DateTime
@@ -23,6 +23,12 @@ const typeDefs = gql`
   }
   type Mutation {
     createUser(input: userCreate!): String!
+    updateUserPassword(id: String!, password: String!): String!
+    deleteUser(id: String!): String!
+  }
+
+  type Subscription {
+    userCreated: User!
   }
 `;
 
